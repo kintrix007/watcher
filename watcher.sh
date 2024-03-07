@@ -52,6 +52,6 @@ fi
 echo "Watching file: '$file'"
 
 while true; do
-    inotifywait -e modify "$file"
+    inotifywait -q -e modify "$file"
     eval "$command"
 done
