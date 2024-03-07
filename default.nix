@@ -18,11 +18,7 @@ pkgs.stdenv.mkDerivation rec {
     cp watcher.sh $out/bin/watcher
   '';
 
-  postFixup =
-    let
-      runtimePath = pkgs.lib.makeBinPath buildInputs;
-    in
-    ''
-      sed -i '2 i export PATH="${runtimePath}:$PATH"' $out/bin/watcher
-    '';
+  postFixup = ''
+    wrapProgram $out/bin/watcher --prefix PATH : ${pkgs.lib.makeBinPath buildInputs}
+  '';
 }
