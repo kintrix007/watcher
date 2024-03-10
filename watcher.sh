@@ -43,6 +43,11 @@ fi
 file="$1"
 shift
 
+if ! [[ -f "$file" ]]; then
+    echo "Error: file not found: '$file'"
+    exit 3
+fi
+
 if [[ "$1" == "--run" ]]; then
     command="$2"
 else
@@ -54,4 +59,11 @@ echo "Watching file: '$file'"
 while true; do
     inotifywait -q -e modify "$file"
     eval "$command"
+
+    exit_code=$?
+    if [[ $exit_code != 0 ]]; then
+        echo "Error: command '$command' failed with exit code $exit_code"
+        echo "Stopping watcher..."
+        exit $exit_code
+    fi
 done
