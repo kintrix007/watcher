@@ -10,6 +10,8 @@ pkgs.stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgs.makeWrapper ];
 
   buildInputs = with pkgs; [
+    bash
+    coreutils
     inotify-tools
   ];
 
