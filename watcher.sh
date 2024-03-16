@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+VERSION="0.1.0"
+
+function version() {
+    echo "watcher version $VERSION"
+}
+
 function help() {
     echo
     echo "Usage:"
@@ -25,6 +31,11 @@ function help() {
 
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     help
+    exit 0
+fi
+
+if [[ "$1" == "--version" || "$1" == "-v" ]]; then
+    version
     exit 0
 fi
 

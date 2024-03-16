@@ -3,7 +3,7 @@ let
 in
 pkgs.stdenv.mkDerivation rec {
   pname = "watcher";
-  version = "0.1";
+  version = "0.2";
 
   src = ./.;
 
