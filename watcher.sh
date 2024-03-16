@@ -54,6 +54,7 @@ else
     command="$*"
 fi
 
+eval "$command"
 echo "Watching file: '$file'"
 
 while true; do
