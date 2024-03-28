@@ -75,7 +75,5 @@ while true; do
     exit_code=$?
     if [[ $exit_code != 0 ]]; then
         echo "Error: command '$command' failed with exit code $exit_code"
-        echo "Stopping watcher..."
-        exit $exit_code
     fi
 done
