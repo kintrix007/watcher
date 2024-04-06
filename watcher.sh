@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="0.1.0"
+VERSION="0.1.1"
 
 function version() {
     echo "watcher version $VERSION"
@@ -51,6 +51,13 @@ if [[ -z $2 ]]; then
     exit 1
 fi
 
+silent=0
+
+if [[ "$1" == "-q" || "$1" == "--quiet" ]]; then
+    silent=1
+    shift
+fi
+
 file="$1"
 shift
 
@@ -59,21 +66,35 @@ if ! [[ -f "$file" ]]; then
     exit 3
 fi
 
+if [[ "$1" == "-q" || "$1" == "--quiet" ]]; then
+    silent=1
+    shift
+fi
+
 if [[ "$1" == "--run" ]]; then
     command="$2"
 else
     command="$*"
 fi
 
-eval "$command"
-echo "Watching file: '$file'"
-
-while true; do
-    inotifywait -q -e modify "$file"
+function main() {
+    echo "Watching file: '$file'"
     eval "$command"
 
-    exit_code=$?
-    if [[ $exit_code != 0 ]]; then
-        echo "Error: command '$command' failed with exit code $exit_code"
-    fi
-done
+    while true; do
+        inotifywait -q -e modify "$file"
+        eval "$command"
+
+        exit_code=$?
+        if [[ $exit_code != 0 && $silent == 0 ]]; then
+          echo "Error: command '$command' failed with exit code $exit_code"
+        fi
+    done
+
+}
+
+if [[ $silent == 1 ]]; then
+    main &>/dev/null
+else
+    main
+fi
